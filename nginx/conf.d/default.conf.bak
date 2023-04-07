@@ -1,0 +1,36 @@
+server {
+        listen          80;
+        server_name chat5.kuzovkov12.ru;
+
+        root /var/www/html/web/;
+        index index.html index.htm index.php;
+
+        location / {
+                try_files $uri $uri/ /index.html /index.php;
+        }
+
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+                include fastcgi_params;
+        }
+
+        location /.well-known/acme-challenge/ {
+            root /var/www/certbot;
+        }
+
+        location /ws {
+            proxy_pass http://ws:9502;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+        }
+
+        access_log "/var/log/chat5.kuzovkov12.ru-nginx-access.log";
+        error_log "/var/log/chat5.kuzovkov12.ru-nginx-error.log";
+}
+
+
+

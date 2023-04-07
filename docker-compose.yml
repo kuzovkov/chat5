@@ -1,0 +1,64 @@
+version: '3.0'
+services:
+  nginx:
+    image: nginx:1.18-alpine
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+     - ./nginx/conf.d:/etc/nginx/conf.d:ro
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+     - share:/run/php
+     - ./certbot/conf:/etc/letsencrypt
+     - ./certbot/www:/var/www/certbot
+     - ./app/src/web:/var/www/html/web
+    networks:
+      - backend
+    depends_on:
+      - app
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - ./app/src:/var/www/html
+      - share:/run/php
+    networks:
+      - backend
+
+  ws:
+    build:
+      context: ./ws
+      dockerfile: Dockerfile
+    volumes:
+      - ./ws/src:/var/www/html
+    networks:
+      - backend
+
+  coturn:
+    build:
+      context: ./docker/coturn
+      dockerfile: Dockerfile
+    ports:
+      - "3478:3478"
+      - "3479:3479"
+      - "5349:5349"
+      - "5350:5350"
+    volumes:
+      - ./docker/coturn/turnserver-alt.conf:/etc/turnserver.conf
+      - ./certbot/conf:/etc/letsencrypt
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  share: {}
