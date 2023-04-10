@@ -10,6 +10,19 @@ sudo docker-compose build
 sudo docker-compose up -d
 ```
 
+#### Install Yii2
+```bash
+docker-compose exec app bash
+composer --ignore-platform-reqs create-project yiisoft/yii2-app-basic basic
+exit
+```
+
+```bash
+sudo chown -R $USER:$USER app/src
+mv app/src/basic/* app/src/
+rm -rf app/src/basic
+```
+
 #### Get SSl certificates
 rename nginx/conf.d/default-ssl.conf -> nginx/conf.d/default-ssl.conf.bak
 
