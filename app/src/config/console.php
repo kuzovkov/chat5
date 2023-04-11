@@ -28,6 +28,9 @@ $config = [
         'db' => $db,
     ],
     'params' => $params,
+    'controllerMap' => [
+        'asset' => app\commands\AssetController::class,
+    ],
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.

@@ -24,12 +24,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
     <title><?= Html::encode($this->title) ?></title>
-    <?php if (isset($this->params['room']) && isset($this->params['username'])):?>
-    <script>
-        var ROOM='<?=$this->params['room']?>';
-        var USERNAME='<?=$this->params['username']?>';
-    </script>
-    <?php endif;?>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">

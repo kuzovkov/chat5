@@ -31,6 +31,8 @@ services:
     volumes:
       - ./app/src:/var/www/html
       - share:/run/php
+    environment:
+       YII_ENV_DEV: 1
     networks:
       - backend
 
