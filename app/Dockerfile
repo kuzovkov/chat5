@@ -25,5 +25,6 @@ chmod a+x /usr/local/bin/composer
 WORKDIR /var/www/html
 COPY ./src .
 COPY ./conf/php.ini /etc/php/8.2/fpm/php.ini
+RUN echo "clear_env = no" >> /etc/php/8.2/fpm/pool.d/www.conf
 ENTRYPOINT /usr/sbin/php-fpm8.2 --nodaemonize --fpm-config /etc/php/8.2/fpm/php-fpm.conf
 

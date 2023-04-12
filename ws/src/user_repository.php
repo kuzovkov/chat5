@@ -47,13 +47,26 @@ class UsersRepository
 
     public function getIdByNicname($nicname, $room=null) {
         foreach ($this->table as $id => $row){
-            if($room && $row['nicname'] === $nicname && $row['room'] === $room)
-                return $id;
-            else if ($row['nicname'] === $nicname)
+            if($room && $row['room'] !== $room)
+                continue;
+            if ($row['nicname'] === $nicname)
                 return $id;
         }
         return null;
     }
+
+    public function countByNicname($nicname, $room=null) {
+        $count = 0;
+        foreach ($this->table as $id => $row){
+            if($room && $row['room'] !== $room)
+                continue;
+            if ($row['nicname'] === $nicname)
+                $count++;
+        }
+        return $count;
+    }
+
+
 
     public function getUsers($room=null){
         $users = [];
@@ -63,6 +76,14 @@ class UsersRepository
             $users[] = $row['nicname'];
         }
         return $users;
+    }
+
+    public function getAll(){
+        $data = [];
+        foreach ($this->table as $id => $row){
+            $data[] = ['id' => $id, 'data' => $row];
+        }
+        return $data;
     }
 
     /**

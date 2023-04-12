@@ -39,7 +39,8 @@ class App {
         this.socket.setEventHandler('upload_error', this.uploadError);
     }
 
-    connect(){
+    connect(data){
+        this.nicname = data.nicname
         this.socket.send('user_connect', {nicname: this.nicname, room: this.options.room});
     }
 
@@ -96,6 +97,7 @@ class App {
      * @param data
      */
     refreshUsersOnline(data){
+        console.log('refreshUsersOnline');
         console.log(data.users_online);
         console.log(data.ice);
         // if (data.ice){

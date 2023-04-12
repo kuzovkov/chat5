@@ -58,7 +58,6 @@ class WebsocketServer
      * @param Server $ws
      */
     private function onWorkerStart(Server $ws): void {
-
         $ws->tick(self::PING_DELAY_MS, function () use ($ws) {
             foreach ($ws->connections as $id) {
                 $ws->push($id, 'ping', WEBSOCKET_OPCODE_PING);
@@ -85,7 +84,13 @@ class WebsocketServer
                 $room = $get['room'];
             }
             if ($nicname && $room){
-                $this->ws->push($request->fd, json_encode(['type' => 'connect']));
+                $duplicate = $this->usersRepository->getIdByNicname($nicname, $room);
+                echo sprintf('duplicate: %s-%s-%s'.PHP_EOL, $nicname, $room, $duplicate);
+                var_dump($this->usersRepository->getAll());
+                if ($duplicate){
+                   $nicname = sprintf('%s-%s', $nicname, \generateNonce(6));
+                }
+                $this->ws->push($request->fd, json_encode(['type' => 'connect', 'nicname' => $nicname]));
                 $user = [
                     'nicname' => $nicname,
                     'room' => $room
@@ -98,6 +103,9 @@ class WebsocketServer
                         continue;
                     $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
                 }
+            } else if ($room){
+                $usersResponse = $this->usersRepository->getUsers($room);
+                $this->ws->push($request->fd, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
             }
         } else {
             $usersResponse = $this->usersRepository->getUsers($room);

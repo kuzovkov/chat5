@@ -17,8 +17,8 @@ class Socket {
     connect(){
         var socketurl = "wss://" + window.location.host + `/ws/`;
         //console.log('app:', this.app);
-        if (this.app.options.username){
-            socketurl = "wss://" + window.location.host + `/ws/?nicname=${this.app.options.username}`;
+        if (this.app.options.room){
+            socketurl = "wss://" + window.location.host + `/ws/?room=${this.app.options.room}`;
         }
         if (this.app.options.username && this.app.options.room){
             socketurl = "wss://" + window.location.host + `/ws/?nicname=${this.app.options.username}&room=${this.app.options.room}`;
@@ -60,7 +60,7 @@ class Socket {
 
     handleMessage(data){
         data = JSON.parse(data);
-        console.log(data);
+        //console.log(data);
         if (this.handlers[data.type] && typeof this.handlers[data.type] === 'function'){
             this.handlers[data.type](data);
         } else {
