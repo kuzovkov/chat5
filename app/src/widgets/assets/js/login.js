@@ -21,11 +21,6 @@ class Login {
         console.log('fillUsersOnline:', data);
         if (data.users_online && Array.isArray(data.users_online)){
             this.users_online = data.users_online;
-            // data.users_online.forEach(user => {
-            //     if (this.users_online.indexOf(user) === -1){
-            //         this.users_online.push(user);
-            //     }
-            // })
         }
         this.listReceived = true;
         console.log('users_online:', this.users_online, 'listReceived:', this.listReceived);
