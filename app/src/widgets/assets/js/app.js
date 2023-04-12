@@ -4,6 +4,7 @@ class App {
     selected_user = null;
     options = null;
     socket = null;
+    filesp2p = null;
 
     constructor(){
         this.options = videochatOptions;
@@ -11,6 +12,7 @@ class App {
         this.socket = new Socket(this);
         this.socket.connect();
         this.setEventHandlers();
+        this.filesp2p = Fp2p;
         // this.files = F;
         // this.files.init(A);
         // this.filesp2p = Fp2p;
@@ -197,12 +199,16 @@ class App {
         //this.wrtc.gotMessage(data);
     }
 
-    get options(){
+    get options (){
         return this.options;
     }
 
-    get socket(){
+    get socket (){
         return this.socket;
+    }
+
+    get filesp2p (){
+        return this.filesp2p
     }
 
 }

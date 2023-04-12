@@ -14,12 +14,16 @@ class VideoChatAssets extends AssetBundle
     ];
     public $js = [
         'js/socket.js',
+        'js/ui.js',
+        'js/filesp2p',
+        'js/vendor/DetectRTC.js',
         'js/wrtc.js',
         'js/app.js',
         'js/index.js',
     ];
     public $depends = [
-
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 
 }
