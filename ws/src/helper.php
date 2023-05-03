@@ -2,6 +2,7 @@
 
 function getIce(){
     return base64_encode(file_get_contents(__DIR__ . '/ice.json'));
+    //return file_get_contents(__DIR__ . '/ice.json');
 }
 
 function generateNonce($len=6){

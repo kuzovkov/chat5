@@ -86,6 +86,16 @@ class UsersRepository
         return $data;
     }
 
+    public function getAliases($room=null){
+        $data = [];
+        foreach ($this->table as $id => $row){
+            if ($room && $row['room'] !== $room)
+                continue;
+            $data[$id] = $row['nicname'];
+        }
+        return $data;
+    }
+
     /**
      * @param int $id
      */

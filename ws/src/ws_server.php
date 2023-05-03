@@ -85,8 +85,6 @@ class WebsocketServer
             }
             if ($nicname && $room){
                 $duplicate = $this->usersRepository->getIdByNicname($nicname, $room);
-                echo sprintf('duplicate: %s-%s-%s'.PHP_EOL, $nicname, $room, $duplicate);
-                var_dump($this->usersRepository->getAll());
                 if ($duplicate){
                    $nicname = sprintf('%s-%s', $nicname, \generateNonce(6));
                 }
@@ -97,11 +95,12 @@ class WebsocketServer
                 ];
                 $this->usersRepository->save($request->fd, $user);
                 $usersResponse = $this->usersRepository->getUsers($room);
+                $ice = \getIce();
                 foreach ($this->ws->connections as $id){
                     $curr_user = $this->usersRepository->get($id);
                     if ($curr_user['data']['room'] && $curr_user['data']['room'] !== $room)
                         continue;
-                    $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
+                    $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));
                 }
             } else if ($room){
                 $usersResponse = $this->usersRepository->getUsers($room);
@@ -118,10 +117,10 @@ class WebsocketServer
      */
     private function onMessage($frame): void {
         echo 'We recieve: ';
-        print_r($frame);
+        //print_r($frame);
         $decodedData = json_decode($frame->data);
-        print('data:'.PHP_EOL);
-        var_dump($decodedData);
+        //print('data:'.PHP_EOL);
+        //var_dump($decodedData);
         if (!isset($decodedData->type))
             return;
         $room = null;
@@ -154,7 +153,7 @@ class WebsocketServer
                     if ($frame->fd === $id){
                         $this->ws->push($frame->fd, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));
                     } else {
-                        $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
+                        $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));
                     }
                 }
                 break;
@@ -171,7 +170,8 @@ class WebsocketServer
                     $room = $user['data']['room'];
                     $message = $decodedData->message;
                     $adresatId = $this->usersRepository->getIdByNicname($decodedData->to, $room);
-                    if ($adresatId){
+                    //var_dump($adresatId); var_dump( $frame->fd);
+                    if ($adresatId && intval($adresatId) !== intval($frame->fd)){
                         $this->ws->push($adresatId, json_encode(['type' => 'wrtc_message', 'message' => $message, 'from' => $nicname]));
                     }
                 }
@@ -205,6 +205,26 @@ class WebsocketServer
                 }
                 break;
 
+            case 'alias':
+                $user = $this->usersRepository->get($frame->fd);
+                if ($user && isset($decodedData->alias)){
+                    $room = $user['data']['room'];
+                    $aliases = $this->usersRepository->getAliases($room);
+                    foreach ($this->ws->connections as $id){
+                        if ($room){
+                            $curr_user = $this->usersRepository->get($id);
+                            if ($curr_user['data']['room'] && $curr_user['data']['room'] !== $room)
+                                continue;
+                        }
+                        if ($frame->fd === $id){
+                            $this->ws->push($frame->fd, json_encode(['type' => 'aliases', 'aliases' => $aliases]));
+                        } else {
+                            $this->ws->push($id, json_encode(['type' => 'aliases', 'aliases' => $aliases]));
+                        }
+                    }
+                }
+                break;
+
             default: echo 'unknown message type'.PHP_EOL;
         }
 
@@ -224,11 +244,12 @@ class WebsocketServer
         $this->usersRepository->delete($id);
         $this->ws->push($id, json_encode(['type' => 'disconnect']));
         $usersResponse = $this->usersRepository->getUsers($room);
+        $ice = \getIce();
         foreach ($this->ws->connections as $id){
             $curr_user = $this->usersRepository->get($id);
             if ($curr_user['data']['room'] && $curr_user['data']['room'] !== $room)
                 continue;
-            $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse]));
+            $this->ws->push($id, json_encode(['type' => 'users_online', 'users_online' => $usersResponse, 'ice' => $ice]));
             $this->ws->push($id, json_encode(['type' => 'user_disconnected', 'user' => $nicname]));
         }
     }

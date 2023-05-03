@@ -10,7 +10,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
-AppAsset::register($this);
+//AppAsset::register($this);
 
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
@@ -24,18 +24,22 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
     <title><?= Html::encode($this->title) ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="/fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="/fontawesome/css/brands.css" rel="stylesheet">
+    <link href="/fontawesome/css/solid.css" rel="stylesheet">
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php $this->beginBody() ?>
 
-<header id="header">
+<!--<header id="header">-->
     <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-    ]);
+//    NavBar::begin([
+//        'brandLabel' => Yii::$app->name,
+//        'brandUrl' => Yii::$app->homeUrl,
+//        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+//    ]);
 //    echo Nav::widget([
 //        'options' => ['class' => 'navbar-nav'],
 //        'items' => [
@@ -54,25 +58,27 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 //                    . '</li>'
 //        ]
 //    ]);
-    NavBar::end();
+//    NavBar::end();
     ?>
-</header>
+<!--</header>-->
 
-<main id="main" class="flex-shrink-0" role="main">
-    <div class="container">
-        <?= $content ?>
-    </div>
-</main>
+<!--<main id="main" class="flex-shrink-0" role="main">-->
+<!--    <div class="container">-->
+<!--        --><?//= $content ?>
+<!--    </div>-->
+<!--</main>-->
+<!---->
+<!--<footer id="footer" class="mt-auto py-3 bg-light">-->
+<!--    <div class="container">-->
+<!--        <div class="row text-muted">-->
+<!--            <div class="col-md-6 text-center text-md-center">&copy; Kuzovkov A.V. --><?//= date('Y') ?><!--</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</footer>-->
 
-<footer id="footer" class="mt-auto py-3 bg-light">
-    <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-center">&copy; Kuzovkov A.V. <?= date('Y') ?></div>
-        </div>
-    </div>
-</footer>
-
+<?= $content ?>
 <?php $this->endBody() ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 </html>
 <?php $this->endPage() ?>
