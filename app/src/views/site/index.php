@@ -6,8 +6,7 @@ use app\widgets\Login;
 
 $this->title = 'Chat 5';
 ?>
-<!--<div class="site-index">-->
 
     <?php echo Login::widget();?>
 
-<!--</div>-->
+
