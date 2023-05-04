@@ -21,8 +21,15 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
 php -r "unlink('composer-setup.php');" && \
 chmod a+x /usr/local/bin/composer
 
+#Install gulp
+RUN apt-get update && apt-get install python3-software-properties gnupg2 curl wget -y
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install nodejs -y && node --version
+RUN npm install -g gulp-cli
+RUN npm install --save-dev gulp gulp-concat gulp-if gulp-rename gulp-sourcemaps gulp-uglify
 
 WORKDIR /var/www/html
+
 COPY ./src .
 COPY ./conf/php.ini /etc/php/8.2/fpm/php.ini
 RUN echo "clear_env = no" >> /etc/php/8.2/fpm/pool.d/www.conf

@@ -39,3 +39,26 @@ docker-compose restart nginx
 ```
 Go to https://domain-name/info.php
 
+Assemble js files with `gulp`:
+```bash
+sudo docker-compose exec app gulp
+```
+
+Clear assets (need after changes in js, css files)
+```bash
+docker-compose exec app php yii asset/clear
+```
+
+##### Run in different mode (development | production)
+
+###### prod:
+```bash
+export YII_ENV=production
+docker-compose up -d
+```
+
+###### dev:
+```bash
+export YII_ENV=development
+docker-compose up -d
+

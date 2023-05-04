@@ -1,4 +1,9 @@
-version: '3.0'
+version: '3.7'
+
+x-anchors:
+  environment: &env
+    YII_ENV: ${YII_ENV:-development}
+
 services:
   nginx:
     image: nginx:1.18-alpine
@@ -31,8 +36,7 @@ services:
     volumes:
       - ./app/src:/var/www/html
       - share:/run/php
-    environment:
-       YII_ENV_DEV: 1
+    environment: *env
     networks:
       - backend
 

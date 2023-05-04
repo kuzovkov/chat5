@@ -1,7 +1,7 @@
 <?php
 
 // comment out the following two lines when deployed to production
-if (getenv('YII_ENV_DEV')){
+if (getenv('YII_ENV') && getenv('YII_ENV') === 'development'){
     defined('YII_DEBUG') or define('YII_DEBUG', true);
     defined('YII_ENV') or define('YII_ENV', 'dev');
 }else{

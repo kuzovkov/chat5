@@ -1,4 +1,4 @@
-Fp2p = {};
+const Fp2p = {};
 
 Fp2p.BYTES_PER_CHUNK = 12*1024;
 Fp2p.BUFFERED_AMOUNT_LIMIT = 10000000;

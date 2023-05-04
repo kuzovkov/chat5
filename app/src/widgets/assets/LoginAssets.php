@@ -12,10 +12,15 @@ class LoginAssets extends AssetBundle
     public $css = [
         'css/login.css'
     ];
-    public $js = [
+    public $js = (YII_DEBUG)?
+        [
         'js/socket.js',
         'js/login.js',
-    ];
+        ] : [
+            'build/index.min.js'
+        ];
+
+
     public $depends = [
 
     ];
